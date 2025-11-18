@@ -28,12 +28,12 @@ def main():
 
     # Scrape companies page
     companies_html = fetch_html(COMPANIES_URL)
-    companies_key = f"sf_ventures/raw/companies_{ts}.html"
+    companies_key = f"sf_ventures/raw_landing/companies_{ts}.html"
     upload_raw_html(companies_key, companies_html)
 
     # Scrape people page
     people_html = fetch_html(PEOPLE_URL)
-    people_key = f"sf_ventures/raw/people_{ts}.html"
+    people_key = f"sf_ventures/raw_landing/people_{ts}.html"
     upload_raw_html(people_key, people_html)
 
 if __name__ == "__main__":

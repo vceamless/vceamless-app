@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-HTML_PATH = os.path.join(BASE_DIR, "data_staging", "raw_landing", "companies.html")
+HTML_PATH = os.path.join(BASE_DIR, "data_staging", "raw_landing", "companies_list_page.html")
 
 def main():
     with open(HTML_PATH, "r", encoding="utf-8") as f:

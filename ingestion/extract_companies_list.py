@@ -3,7 +3,7 @@ import json
 from bs4 import BeautifulSoup
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-HTML_PATH = os.path.join(BASE_DIR, "data_staging", "raw_landing", "companies.html")
+HTML_PATH = os.path.join(BASE_DIR, "data_staging", "raw_landing", "companies_list_page.html")
 OUT_PATH = os.path.join(BASE_DIR, "data_staging", "bronze", "companies_list.json")
 
 def classify_tags(classes):
