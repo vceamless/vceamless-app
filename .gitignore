@@ -13,3 +13,7 @@ tfplan
 
 # macOS
 .DS_Store
+
+# Local data lake
+data_staging/raw_landing/
+data_staging/bronze/
