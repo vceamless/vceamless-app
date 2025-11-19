@@ -1,7 +1,8 @@
 from bs4 import BeautifulSoup
 import os
+from pathlib import Path
 
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+BASE_DIR = Path(__file__).resolve().parents[2]
 HTML_PATH = os.path.join(BASE_DIR, "data_staging", "raw_landing", "companies_list_page.html")
 
 def main():

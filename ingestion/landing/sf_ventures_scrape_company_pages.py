@@ -7,9 +7,9 @@ import boto3
 import requests
 
 # --- Config ---
+BASE_DIR = Path(__file__).resolve().parents[2]
 
 # Local bronze input
-BASE_DIR = Path(__file__).resolve().parent.parent
 BRONZE_COMPANIES_PATH = BASE_DIR / "data_staging" / "bronze" / "companies_list.json"
 
 # Local raw landing output for detail pages
@@ -76,6 +76,41 @@ def main():
             continue
 
         # If local file already exists, skip to avoid re-hitting the site
+        # ------------------------------------------------------------------------------
+        # NOTE ABOUT PRODUCTION INGESTION / RE-RUN CONTROL
+        #
+        # Currently, we skip scraping a company detail page if a *local* HTML file already
+        # exists in `data_staging/raw_landing/company_pages/`. This is the correct behavior
+        # for a local exploratory workflow, because:
+        #
+        #   - It avoids re-hitting the live website unnecessarily.
+        #   - It keeps local iterations fast.
+        #   - Local state is persistent across runs.
+        #
+        # HOWEVER, this logic is NOT sufficient for any production ingestion pipeline
+        # (e.g., Airflow, ECS, Lambda, or containerized deployments), where:
+        #
+        #   - Local filesystem state is ephemeral or nonexistent.
+        #   - Each task/container run should be idempotent.
+        #   - Re-run behavior should be governed by *S3 state*, *metadata tables*, or
+        #     *checkpoint markers*, not local files.
+        #
+        # In a real pipeline, this skip logic would be replaced with something like:
+        #
+        #   - Check whether `s3://<bucket>/sf_ventures/raw_landing/company_pages/<slug>_<ts>.html`
+        #     already exists (HEAD request / list / or S3 Select).
+        #
+        #   - Or maintain a `scrape_log` table in DynamoDB, PostgreSQL, or Snowflake that
+        #     records which slugs have been scraped, with timestamps.
+        #
+        #   - Or use a "run timestamp" pattern: always write new objects to
+        #     `company_pages/<slug>_<ingest_run_ts>.html`, and point downstream logic to
+        #     the latest run via metadata.
+        #
+        # This file keeps the local-skip logic intentionally simple for the demo phase.
+        # DO NOT reuse this skip condition as-is in any orchestrated production environment.
+        # ------------------------------------------------------------------------------
+
         local_path = COMPANY_PAGES_DIR / f"{slug}.html"
         if local_path.exists():
             print(f"[SKIP] Local file already exists for slug={slug}: {local_path}")

@@ -1,7 +1,11 @@
 import os
 import time
+from pathlib import Path
+
 import boto3
 import requests
+
+BASE_DIR = Path(__file__).resolve().parents[2]
 
 BUCKET = os.getenv("RAW_BUCKET", "vceamless-raw-web-031561760771")
 s3 = boto3.client("s3")

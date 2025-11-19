@@ -1,8 +1,9 @@
 import os
 import json
 from bs4 import BeautifulSoup
+from pathlib import Path
 
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+BASE_DIR = Path(__file__).resolve().parents[2]
 HTML_PATH = os.path.join(BASE_DIR, "data_staging", "raw_landing", "companies_list_page.html")
 OUT_PATH = os.path.join(BASE_DIR, "data_staging", "bronze", "companies_list.json")
 
